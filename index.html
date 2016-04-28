@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#show").click(function () {
+                $(".div1").toggle();
+            });
+            $("#fadein").click(function () {
+                $(".div2").fadeIn();
+            });
+            $("#fadeout").click(function () {
+                $("#div3").fadeOut();
+            });
+            $("#slide").click(function () {
+                $("#div4").slideToggle();
+            });
+            $("#anima").click(function () {
+                $("#div5").animate({
+                    left: 500,
+                    top: 500,
+                    opacity: 0.5,
+                    width: 150,
+                    head: 150
+                });
+            });
+
+        });
+    </script>
+</head>
+<body>
+<button id="show">显示隐藏</button>
+<div class="div1" style="width: 300px;height: 300px;background: greenyellow;float: left">1
+</div>
+<button id="fadein">淡入</button>
+<div class="div2" style="width: 300px;height: 300px;background: blue;float: left;display: none">2</div>
+<button id="fadeout">淡出</button>
+<div id="div3" style="width: 300px;height: 300px;background: black;float: left">3</div>
+<button id="slide">滑动</button>
+<div id="div4" style="width: 300px;height: 300px;background: yellow;float: left">4</div>
+<button id="anima">动画</button>
+<div id="div5" style="width: 300px;height: 300px;background: olive;float: left;position: absolute">5</div>
+</body>
+</html>

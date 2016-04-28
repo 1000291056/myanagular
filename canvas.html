@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        #mycanvas {
+            background-color: aqua;
+            position: absolute;
+        }
+    </style>
+    <script src="js/jquery.js"></script>
+    <script>
+        var angelPointer = -75 * Math.PI / 180;
+    </script>
+    <script>
+        function draw() {
+            var canvas = document.getElementById("mycanvas");
+            var context = canvas.getContext("2d");
+            var CIRCLECENTERHEIGHT = 30;//中间圆离屏幕高度
+            var SCALEHEIGHT = 20;//尺度线高度
+            var ORIGENANGEL = -75 * Math.PI / 180;//画标度时canvas的初始位置
+            var SCALE = 10 * Math.PI / 180;
+            var clientw = document.body.scrollWidth;
+            var clienth = document.body.scrollHeight;
+            var l = (clientw / 2);
+            var t = (clienth / 2);
+            var width = canvas.width;
+            var height = canvas.height;
+            context.clearRect(0,0,width,height);
+            var radius = width / 2;
+            $("#mycanvas").css({left: l - (width / 2), top: t - (height / 2)});
+            context.translate(width / 2, height);
+
+
+            context.lineWidth = 10;
+            context.strokeStyle = "green";//绿色
+            context.beginPath();
+            context.arc(0, 0 - CIRCLECENTERHEIGHT, radius, -15 * Math.PI / 180, -145 * Math.PI / 180, true);
+            context.stroke();
+//            var LinearGradient = context.createLinearGradient(radius, 0, -radius, 0);
+//            LinearGradient.addColorStop(0, "#ff0000");
+//            LinearGradient.addColorStop(2/15, "#008300");
+            context.strokeStyle = "#ff0000";//红色
+            context.beginPath();
+            context.arc(0, 0 - CIRCLECENTERHEIGHT, radius, -145 * Math.PI / 180, -165 * Math.PI / 180, true);
+            context.stroke();
+            /******************画分度******************/
+            context.strokeStyle = "#000000";//黑色
+            context.lineWidth = 2;
+            var angle = ORIGENANGEL;
+            context.translate(0, -CIRCLECENTERHEIGHT);
+            context.save();
+            for (var i = 0; i < 16; i++) {
+                context.rotate(angle);
+                context.beginPath();
+                context.moveTo(0, -radius);
+                context.lineTo(0, -(radius - SCALEHEIGHT));
+                context.stroke();
+                angle = SCALE;
+            }
+            context.restore();
+            /***************end**************/
+
+            /************指针*************/
+            context.save();
+            context.fillStyle = "#ff0000"
+            context.rotate(angelPointer);
+            context.beginPath();
+            context.moveTo(-5, 25);
+            context.lineTo(5, 25);
+            context.lineTo(0, -radius);
+            context.closePath();
+            context.fill();
+            context.restore();
+            /***************end**************/
+
+            /************圆*************/
+            context.save();
+            context.beginPath();
+            context.moveTo(0, 0);
+            context.fillStyle = "#000000"
+            context.arc(0, 0, 10, 0, 2 * Math.PI, true);
+            context.fill();
+            context.restore();
+            /***************end**************/
+            angelPointer+=15 * Math.PI / 180;
+
+        }
+    </script>
+    <script>
+
+        $(document).ready(function () {//一共150du
+            var canvas = document.getElementById("mycanvas");
+            $("#mycanvas").click(function () {
+                draw();
+            });
+//            canvas.addEventListener("cli", function (event) {
+//                var touch=event.targetTouches[0];
+//                var x = touch.clientX;
+//                var y = touch.clientY;
+////                angelPointer = -Math.atan(y / x);
+//                draw();
+//            }, false);
+            var divEle = document.getElementById("div");
+            divEle.addEventListener("touchmove", function (event) {
+                var x = event.screenX;
+                var y = event.screenY;
+            }, false);
+            draw();
+        });
+    </script>
+</head>
+<body>
+<div id="div" style="width: 100%">我</div>
+<canvas id="mycanvas" width="300" height="300"></canvas>
+</body>
+</html>
