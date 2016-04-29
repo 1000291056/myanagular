@@ -5,7 +5,7 @@
     <title>angular 第二课程</title>
     <script src="../js/angular.js" type="text/javascript"></script>
 </head>
-<body ng-app="app" ng-init="name='hello';count=5;price=100;points=[2,5,6,2,7]">
+<body ng-app="app" ng-init="name='上海';count=5;price=100;points=[2,5,6,2,7]">
 <p>绑定数据到元素</p>
 <p>请输入姓名：<input ng-model="name" type="text"></p>
 <p>{{name}}</p>
@@ -23,9 +23,9 @@
     </li>
 </ul>
 <p>城市列表</p>
-<ul>
+<ul ng-controller="weatherController">
     <li ng-repeat="x in cities">
-        {{x.province_cn}}
+        {{x.province_cn+x.name_cn+x.district_cn}}
     </li>
 </ul>
 <script>
@@ -48,14 +48,17 @@
     });
     app.controller("weatherController", function ($scope, $http) {
         $scope.key = "3de2e5d50814460f2d0be46c2746b8a6";
-        $scope.city = "安徽";
+        $scope.city = $scope.name;
         $scope.url = "http://apis.baidu.com/apistore/weatherservice/citylist?cityname=" + $scope.city;
-        $http.get($scope.url, [{apikey: $scope.key}]).success(function (data, status, headers, config) {
+        $scope.request = {
+            headers: {"apikey": $scope.key}
+        }
+        $http.get($scope.url, $scope.request).success(function (data, status, headers, config) {
             $scope.cities = data.retData;
         }).error(function (data, status, headers, config) {
 
         });
-    })
+    });
 </script>
 </body>
 </html>
