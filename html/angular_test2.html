@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>angular 第二课程</title>
     <script src="../js/angular.js" type="text/javascript"></script>
+    <script src="../js/angular-route.js"></script>
 </head>
 <body ng-app="app" ng-init="name='上海';count=5;price=100;points=[2,5,6,2,7]">
 <p>绑定数据到元素</p>
@@ -22,6 +23,12 @@
         {{"我的名字是："+x.name+"今年"+x.age+"岁"}}
     </li>
 </ul>
+
+<a href="#tab1">tab1</a>
+<a href="#tab2">tab2</a>
+<div ng-view></div>
+
+
 <p>城市列表</p>
 <ul ng-controller="weatherController">
     <li ng-repeat="x in cities | orderBy:'district_cn'">
@@ -30,19 +37,29 @@
 </ul>
 
 <script>
-    var app = angular.module("app", [],function($provide){
-      $provide.provider("myprovider",function(){
-        this.$get=function(){
-          return {
-            msa:"hello"
-          };
-        }
-      })
+    var app = angular.module("app", ['ngRoute'], function ($provide) {
+        $provide.provider("myprovider", function () {
+            this.$get = function () {
+                return {
+                    msa: "hello"
+                };
+            }
+        })
     });
+    app.config(["$routeProvider", function ($routeProvider) {
+        $routeProvider.when("/tab1", {templateUrl: "tab1.html",controller:"tab1COntroller"}).when("/tab2", {templateUrl: "tab2.html",controller:"tab2COntroller"}).otherwise({redirectTo: "tab1.html"});
+
+    }])
     app.run(["$rootScope", function ($rootScope) {
         $rootScope.ll = 'sb';
     }]);
-    app.controller("MyController", ["$scope","$rootScope","myprovider",function ($scope, $rootScope,$myprovider) {
+    app.controller("tab1COntroller", ["$scope", function ($scope) {
+        $scope.text="tab1";
+    }]);
+    app.controller("tab2COntroller", ["$scope", function ($scope) {
+        $scope.text="tab2";
+    }]);
+    app.controller("MyController", ["$scope", "$rootScope", "myprovider", function ($scope, $rootScope, $myprovider) {
         $scope.Person = {
             name: '小美',
             password: "1234"
@@ -72,22 +89,21 @@
         $scope.cityf = function () {
             return $scope.name;
         }
+        $scope.getdata = function (city) {
+            $scope.url = "http://apis.baidu.com/apistore/weatherservice/citylist?cityname=" + city;
+            $http.get($scope.url, $scope.request).success(function (data, status, headers, config) {
+                $scope.cities = data.retData;
+            }).error(function (data, status, headers, config) {
+
+            });
+        };
         var watch = $scope.$watch($scope.cityf, function (newVal, oldVal) {
             if (newVal != oldVal) {
-                $scope.url = "http://apis.baidu.com/apistore/weatherservice/citylist?cityname=" + newVal;
-                $http.get($scope.url, $scope.request).success(function (data, status, headers, config) {
-                    $scope.cities = data.retData;
-                }).error(function (data, status, headers, config) {
-
-                });
+                $scope.getdata(newVal);
             }
 
         });
-//        $http.get($scope.url, $scope.request).success(function (data, status, headers, config) {
-//            $scope.cities = data.retData;
-//        }).error(function (data, status, headers, config) {
-//
-//        });
+        $scope.getdata($scope.name);
 
     }]);
 </script>
