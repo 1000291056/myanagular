@@ -9,9 +9,9 @@
 <p>绑定数据到元素</p>
 <p>请输入姓名：<input ng-model="name" type="text"></p>
 <p>{{name}}</p>
-总价格{{count*price}}
+总价格{{count*price|currency}}
 <div>
-    {{"数量"+count+"价格"+price}}
+    {{"数量"+count+"价格"+(price|currency)}}
 </div>
 <div>{{"数组第3个是"+points[2]}}</div>
 <div ng-controller="MyController">
@@ -24,7 +24,7 @@
 </ul>
 <p>城市列表</p>
 <ul ng-controller="weatherController">
-    <li ng-repeat="x in cities">
+    <li ng-repeat="x in cities | orderBy:'district_cn'">
         {{x.province_cn+x.name_cn+x.district_cn}}
     </li>
 </ul>
