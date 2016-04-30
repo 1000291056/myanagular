@@ -30,14 +30,17 @@
 </ul>
 <script>
     var app = angular.module("app", []);
-    app.controller("MyController", function ($scope) {
+    app.run(["$rootScope", function ($rootScope) {
+        $rootScope.ll = 'sb';
+    }]);
+    app.controller("MyController", function ($scope, $rootScope) {
         $scope.Person = {
             name: '小美',
             password: "1234"
         }
         $scope.students = [
             {
-                name: "小三",
+                name: $rootScope.ll,
                 age: 12
             },
             {
@@ -46,19 +49,34 @@
             }
         ]
     });
-    app.controller("weatherController", function ($scope, $http) {
+    app.controller("weatherController", ['$scope', "$http", function ($scope, $http) {
         $scope.key = "3de2e5d50814460f2d0be46c2746b8a6";
         $scope.city = $scope.name;
         $scope.url = "http://apis.baidu.com/apistore/weatherservice/citylist?cityname=" + $scope.city;
         $scope.request = {
             headers: {"apikey": $scope.key}
+        };
+        $scope.cityf = function () {
+            return $scope.name;
         }
-        $http.get($scope.url, $scope.request).success(function (data, status, headers, config) {
-            $scope.cities = data.retData;
-        }).error(function (data, status, headers, config) {
+        var watch = $scope.$watch($scope.cityf, function (newVal, oldVal) {
+            if (newVal != oldVal) {
+                $scope.url = "http://apis.baidu.com/apistore/weatherservice/citylist?cityname=" + newVal;
+                $http.get($scope.url, $scope.request).success(function (data, status, headers, config) {
+                    $scope.cities = data.retData;
+                }).error(function (data, status, headers, config) {
+
+                });
+            }
 
         });
-    });
+//        $http.get($scope.url, $scope.request).success(function (data, status, headers, config) {
+//            $scope.cities = data.retData;
+//        }).error(function (data, status, headers, config) {
+//
+//        });
+
+    }]);
 </script>
 </body>
 </html>
