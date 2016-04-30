@@ -30,11 +30,19 @@
 </ul>
 
 <script>
-    var app = angular.module("app", []);
+    var app = angular.module("app", [],function($provide){
+      $provide.provider("myprovider",function(){
+        this.$get=function(){
+          return {
+            msa:"hello"
+          };
+        }
+      })
+    });
     app.run(["$rootScope", function ($rootScope) {
         $rootScope.ll = 'sb';
     }]);
-    app.controller("MyController", function ($scope, $rootScope) {
+    app.controller("MyController", ["$scope","$rootScope","myprovider",function ($scope, $rootScope,$myprovider) {
         $scope.Person = {
             name: '小美',
             password: "1234"
@@ -47,9 +55,13 @@
             {
                 name: "小四",
                 age: 25
+            },
+            {
+                name: $myprovider.msa,
+                age: 25
             }
         ]
-    });
+    }]);
     app.controller("weatherController", ['$scope', "$http", function ($scope, $http) {
         $scope.key = "3de2e5d50814460f2d0be46c2746b8a6";
         $scope.city = $scope.name;
