@@ -1,0 +1,19 @@
+#border_radius {
+    text-align: center;
+    background-color: #3aff13;
+    border: #543aff 2px solid;
+    border-radius: 10px;
+}
+
+#box_shadow {
+    width: 50%;
+    text-align: center;
+    background-color: #3aff13;
+    box-shadow: 10px 10px #ff2e43;
+}
+
+#border_image {
+    width: 50%;
+    text-align: center;
+    border-image: url("../img/border.png") 30 30 round;
+}
