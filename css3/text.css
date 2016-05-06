@@ -1,0 +1,25 @@
+@font-face {
+    font-family: myfirstfront;
+    src: url(../front/stxingka.TTF);
+}
+
+#text_shadow {
+    text-align: center;
+    width: 50%;
+    margin-top: 1%;
+    text-shadow: 10px 10px 0px #ff553c;
+}
+
+#word_wrap {
+    text-align: center;
+    width: 50%;
+    margin-top: 1%;
+    word-wrap: break-word;
+}
+
+#font_face {
+    text-align: center;
+    width: 50%;
+    margin-top: 1%;
+    font-family: myfirstfront;
+}
